@@ -215,5 +215,53 @@ console.log(hashMap.entries());
 console.log(hashMap.size);
 
 class HashSet{
-   constructor(){}
+   constructor(){
+      this.data={};
+      this.size=0;
+   }
+
+   add(key){
+      this.data[key]=true;
+      this.size++;
+      return this.data;
+      
+   
+   }
+   //  Check if an key exist
+   contains(key){
+      return this.data.hasOwnProperty(key);
+
+   }
+
+   // remove a key from the hashset
+   remove(key){
+      if(this.contains(key)){
+         delete this.data[key];
+      }
+
+   }
+
+   // clear all the hashset
+   clear(){
+      this.data={};
+   }
+
+   //  to string
+   toString(){
+      return `HashSet(${Object.keys(this.data)})`;
+   }
+   // check the size
+   size(){
+      return this.size;
+   }
 }
+
+const hashSet=new HashSet();
+console.log(hashSet.add("paul"));
+console.log(hashSet.add("jean"));
+console.log(hashSet.data);
+console.log(hashSet.contains("paul"));
+console.log(hashSet.remove("paul"));
+// console.log(hashSet.clear());
+console.log(hashSet.data);
+console.log(hashSet.toString());
