@@ -6,9 +6,36 @@ class Node{
    }
 }
 class HashMap{
-   constructor(){
-      this.tables=new Array(16);
-      this.size=0;
+   constructor(size){
+      this.size=16;
+      this.tables=new Array(size);
+      this.keyCount=0;
+      this.loadFactor=0.75;
+   }
+
+   // resize(){
+   //    const newSize=this.size*2;
+   //    const newTables=new Array(newSize);
+   //    this.size=newSize;
+   //    this.tables=newTables; 
+   //    this.rehash(newTables, newSize)   ;
+   // }
+   rehash(){
+      const newSize=this.size*2;
+      const newTables=new Array(newSize);
+      this.size=newSize;
+      this.tables=newTables; 
+   
+      for(let i=0; i<newSize; i++){
+         let cur=this.tables[i];
+         while(cur){
+            const newIndex=this.hash(cur.key);
+            let key=cur.key;
+            let val=cur.value;
+            this.set(key, val);
+            cur=cur.next;
+         }
+      }
    }
 
    // Hash function to transform a key into hashcode
@@ -24,18 +51,28 @@ class HashMap{
    // Add a key-value pair to hash table  
    set(key, value){
       const index= this.hash(key);
+      if(this.keyCount/this.size>=this.loadFactor){
+         this.rehash();
+         
+      }
       if(!this.tables[index]){
          this.tables[index]=new Node(key, value);
-         this.size++;
+         this.keyCount++;
          return this.tables[index];    
       } else{
          let cur=this.tables[index];
-         while(cur.next!==null){
-            cur=cur.next;
-            
+         while(cur){
+            if(cur.key==key){
+               cur.value=value;
+               return cur;
+            }
+            else{
+               cur.next=new Node(key, value); 
+               this.keyCount++; 
+            }
+            cur=cur.next;            
          } 
-         cur.next=new Node(key, value); 
-         this.size++;        
+                
          return cur.next; 
       }          
    }
@@ -84,7 +121,7 @@ class HashMap{
       while(cur){
          if(cur.key==key){
             this.tables[index]=cur.next;
-               this.size--                 
+               this.keyCount--                 
          }    
          cur=cur.next;                          
       }
@@ -98,13 +135,13 @@ class HashMap{
 
    // returns the number of stored keys in the hash map.
    length(){
-      return this.size;  
+      return this.keyCount;  
    }
 
    // removes all entries in the hash map.
    clear(){
-      this.size=0;
-      this.tables=new Array(16);
+      this.keyCount=0;
+      this.tables=new Array(this.size);
    }
 
    //  returns an array containing all the keys inside the hash map.
@@ -144,20 +181,39 @@ class HashMap{
    }
 }
 
-const hashMap=new HashMap();
-console.log(hashMap.hash("john"));
+const hashMap=new HashMap(16);
 console.log(hashMap.set("john", "smith"));
-console.log(hashMap.set("john", "backer"));
-console.log(hashMap.set("hojn", "miller"));
+console.log(hashMap.set("owen", "backer"));
+console.log(hashMap.set("carl", "miller"));
 console.log(hashMap.set("lena", "manh"));
+console.log(hashMap.set("lara", "pigeous"));
+console.log(hashMap.set("ariel", "bedou"));
+console.log(hashMap.set("anel", "bart"));
+console.log(hashMap.set("anel", "bart"));
+console.log(hashMap.set("duck", "zhin"));
+console.log(hashMap.set("drake", "klaris"));
+console.log(hashMap.set("curtis", "jackson"));
+console.log(hashMap.set("dine", "hach"));
+console.log(hashMap.set("anas", "chiffer"));
+console.log(hashMap.set("werner", "jehwin"));
+console.log(hashMap.set("jean", "dedieu"));
+console.log(hashMap.set("paul", "ballis"));
+console.log(hashMap.set("sarah", "mong"));
+console.log(hashMap.size);
+console.log(hashMap.tables);
 console.log(hashMap.length());
-console.log(hashMap.get("maël"));
-console.log(hashMap.has("hojn"));
+console.log(hashMap.get("lara"));
+console.log(hashMap.has("carl"));
 // console.log(hashMap.remove("john"));
 console.log(hashMap.tables);
 console.log(hashMap.length());
 // console.log(hashMap.clear());
-console.log(hashMap.tables);
+// console.log(hashMap.tables);
 console.log(hashMap.keys());
 console.log(hashMap.values());
 console.log(hashMap.entries());
+console.log(hashMap.size);
+
+class HashSet{
+   constructor(){}
+}
